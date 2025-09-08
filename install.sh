@@ -69,6 +69,14 @@ select launch_behavior in "Yes_Launch_Steam" "No_Only_if_Already_Running"; do
 done
 echo "Launch Steam on controller connection if it was closed? $LAUNCH_PREFERENCE"
 
+CONFIG_DIR="$HOME/.config/auto-big-picture"
+echo "Default config path: $CONFIG_DIR"
+read -p "Change config path? Input path or leave blank to keep default: " custom_path
+if [ -n "$custom_path" ]; then
+    CONFIG_DIR="$custom_path"
+fi
+echo "Using config path: $CONFIG_DIR"
+
 echo "Checking for dependencies..."
 if command -v pacman &> /dev/null; then
     PACKAGE="python-dbus"
@@ -99,16 +107,17 @@ else
 fi
 
 echo "Creating directories..."
-mkdir -p "$HOME/scripts"
+mkdir -p "$CONFIG_DIR"
 mkdir -p "$HOME/.config/systemd/user"
 
 echo "Configuring and copying files..."
 sed -e "s/__CONTROLLER_MAC_ADDRESS__/$CONTROLLER_MAC/g" \
     -e "s/__LAUNCH_PREFERENCE__/$LAUNCH_PREFERENCE/g" \
-    auto_big_picture.py.template > "$HOME/scripts/auto_big_picture.py"
+    auto_big_picture.py.template > "$CONFIG_DIR/auto_big_picture.py"
 
-sed "s|__HOME__|$HOME|g" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
-chmod +x "$HOME/scripts/auto_big_picture.py"
+SCRIPT_PATH="$CONFIG_DIR/auto_big_picture.py"
+sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
+chmod +x "$CONFIG_DIR/auto_big_picture.py"
 
 echo "Reloading systemd and starting the service..."
 systemctl --user daemon-reload

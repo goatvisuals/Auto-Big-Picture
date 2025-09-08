@@ -22,10 +22,17 @@ def handle_connect():
     
     steam_is_running = (subprocess.run("pgrep -x steam > /dev/null", shell=True).returncode == 0)
 
-    if steam_is_running or LAUNCH_IF_CLOSED:
-        os.system("steam steam://open/bigpicture &")
+    if LAUNCH_IF_CLOSED:
+        os.system("steam -bigpicture &")
+    else:
+        if steam_is_running:
+            os.system("steam steam://open/bigpicture &")
 
 def handle_disconnect():
+    steam_is_running = (subprocess.run("pgrep -x steam > /dev/null", shell=True).returncode == 0)
+    if not steam_is_running:
+        return
+
     game_check_command = "pgrep -af 'steamapps/common' | grep -v 'd3ddriverquery64.exe' > /dev/null"
     is_game_running = (subprocess.run(game_check_command, shell=True).returncode == 0)
 
