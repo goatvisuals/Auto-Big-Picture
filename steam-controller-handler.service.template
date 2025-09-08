@@ -1,0 +1,10 @@
+[Unit]
+Description=Handles steam big picture for Bluetooth/USB controllers
+
+[Service]
+ExecStart=__HOME__/scripts/steam_controller_handler.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=default.target

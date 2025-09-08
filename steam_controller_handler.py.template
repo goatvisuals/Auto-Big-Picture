@@ -1,0 +1,95 @@
+#!/usr/bin/env python3
+import dbus
+import dbus.mainloop.glib
+from gi.repository import GLib
+import os
+import subprocess
+import time
+import threading
+import glob
+
+CONTROLLER_MAC_ADDRESS = "__CONTROLLER_MAC_ADDRESS__"
+
+# Core
+
+def handle_connect():
+    """Called when any controller connects."""
+    os.system("steam steam://open/bigpicture &")
+
+def handle_disconnect():
+    """Called when any controller disconnects."""
+    game_check_command = "pgrep -af 'steamapps/common' | grep -v 'd3ddriverquery64.exe' > /dev/null"
+    is_game_running = (subprocess.run(game_check_command, shell=True).returncode == 0)
+
+    if is_game_running:
+        pass
+    else:
+        os.system("steam steam://close/bigpicture &")
+
+# Bluetooth monitoring
+
+def on_property_changed(interface, changed, invalidated, path):
+    if interface == 'org.bluez.Device1' and 'Connected' in changed:
+        if changed['Connected']:
+            handle_connect()
+        else:
+            handle_disconnect()
+
+def on_bt_device_found(path, interfaces):
+    device_properties = interfaces.get('org.bluez.Device1', {})
+    if device_properties.get('Address') == CONTROLLER_MAC_ADDRESS:
+        bus.add_signal_receiver(
+            on_property_changed,
+            dbus_interface='org.freedesktop.DBus.Properties',
+            signal_name='PropertiesChanged',
+            path=path,
+            path_keyword='path'
+        )
+
+# USB monitoring
+
+def usb_monitor():
+    """Periodically scans for USB joysticks and detects changes."""
+    joystick_path = "/dev/input/by-id/*-event-joystick"
+    known_devices = set(glob.glob(joystick_path))
+
+    while True:
+        time.sleep(2) # Scan every 2 seconds
+        current_devices = set(glob.glob(joystick_path))
+
+        added = current_devices - known_devices
+        removed = known_devices - current_devices
+
+        if added:
+            handle_connect()
+
+        if removed:
+            handle_disconnect()
+
+        known_devices = current_devices
+
+# Main
+
+if __name__ == '__main__':
+    usb_thread = threading.Thread(target=usb_monitor, daemon=True)
+    usb_thread.start()
+
+    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+    bus = dbus.SystemBus()
+    device_path_ending = CONTROLLER_MAC_ADDRESS.replace(":", "_")
+    manager = dbus.Interface(bus.get_object('org.bluez', '/'), 'org.freedesktop.DBus.ObjectManager')
+    objects = manager.GetManagedObjects()
+    for path, interfaces in objects.items():
+        if path.endswith(device_path_ending):
+            on_bt_device_found(path, interfaces)
+    bus.add_signal_receiver(
+        on_bt_device_found,
+        dbus_interface='org.freedesktop.DBus.ObjectManager',
+        signal_name='InterfacesAdded'
+    )
+
+    loop = GLib.MainLoop()
+    try:
+        loop.run()
+    except KeyboardInterrupt:
+        pass
