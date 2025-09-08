@@ -9,12 +9,15 @@ import threading
 import glob
 
 CONTROLLER_MAC_ADDRESS = "__CONTROLLER_MAC_ADDRESS__"
+LAUNCH_IF_CLOSED = __LAUNCH_PREFERENCE__
 
 # Core
 
 def handle_connect():
-    """Called when any controller connects."""
-    os.system("steam steam://open/bigpicture &")
+    steam_is_running = (subprocess.run("pgrep -x steam > /dev/null", shell=True).returncode == 0)
+
+    if steam_is_running or LAUNCH_IF_CLOSED:
+        os.system("steam steam://open/bigpicture &")
 
 def handle_disconnect():
     """Called when any controller disconnects."""
@@ -35,7 +38,7 @@ def on_property_changed(interface, changed, invalidated, path):
         else:
             handle_disconnect()
 
-def on_bt_device_found(path, interfaces):
+def on_bt_device_found(path, interfaces, bus):
     device_properties = interfaces.get('org.bluez.Device1', {})
     if device_properties.get('Address') == CONTROLLER_MAC_ADDRESS:
         bus.add_signal_receiver(
@@ -74,22 +77,30 @@ if __name__ == '__main__':
     usb_thread = threading.Thread(target=usb_monitor, daemon=True)
     usb_thread.start()
 
-    dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
-    bus = dbus.SystemBus()
-    device_path_ending = CONTROLLER_MAC_ADDRESS.replace(":", "_")
-    manager = dbus.Interface(bus.get_object('org.bluez', '/'), 'org.freedesktop.DBus.ObjectManager')
-    objects = manager.GetManagedObjects()
-    for path, interfaces in objects.items():
-        if path.endswith(device_path_ending):
-            on_bt_device_found(path, interfaces)
-    bus.add_signal_receiver(
-        on_bt_device_found,
-        dbus_interface='org.freedesktop.DBus.ObjectManager',
-        signal_name='InterfacesAdded'
-    )
+    if CONTROLLER_MAC_ADDRESS and CONTROLLER_MAC_ADDRESS != "DISABLED":
+        dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
+        bus = dbus.SystemBus()
+        device_path_ending = CONTROLLER_MAC_ADDRESS.replace(":", "_")
+        manager = dbus.Interface(bus.get_object('org.bluez', '/'), 'org.freedesktop.DBus.ObjectManager')
+        objects = manager.GetManagedObjects()
+        for path, interfaces in objects.items():
+            if path.endswith(device_path_ending):
+                on_bt_device_found(path, interfaces, bus)
+        
+        bus.add_signal_receiver(
+            lambda path, ifaces: on_bt_device_found(path, ifaces, bus),
+            dbus_interface='org.freedesktop.DBus.ObjectManager',
+            signal_name='InterfacesAdded'
+        )
 
-    loop = GLib.MainLoop()
-    try:
-        loop.run()
-    except KeyboardInterrupt:
-        pass
+        loop = GLib.MainLoop()
+        try:
+            loop.run()
+        except KeyboardInterrupt:
+            pass
+    else:
+        try:
+            while True:
+                time.sleep(3600)
+        except KeyboardInterrupt:
+            pass
