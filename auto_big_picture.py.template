@@ -14,13 +14,18 @@ LAUNCH_IF_CLOSED = __LAUNCH_PREFERENCE__
 # Core
 
 def handle_connect():
+    bp_check = "xwininfo -root -tree | grep -q 'Steam Big Picture Mode'"
+    is_bp_running = (subprocess.run(bp_check, shell=True).returncode == 0)
+    
+    if is_bp_running:
+        return
+    
     steam_is_running = (subprocess.run("pgrep -x steam > /dev/null", shell=True).returncode == 0)
 
     if steam_is_running or LAUNCH_IF_CLOSED:
         os.system("steam steam://open/bigpicture &")
 
 def handle_disconnect():
-    """Called when any controller disconnects."""
     game_check_command = "pgrep -af 'steamapps/common' | grep -v 'd3ddriverquery64.exe' > /dev/null"
     is_game_running = (subprocess.run(game_check_command, shell=True).returncode == 0)
 
@@ -52,12 +57,11 @@ def on_bt_device_found(path, interfaces, bus):
 # USB monitoring
 
 def usb_monitor():
-    """Periodically scans for USB joysticks and detects changes."""
     joystick_path = "/dev/input/by-id/*-event-joystick"
     known_devices = set(glob.glob(joystick_path))
 
     while True:
-        time.sleep(2) # Scan every 2 seconds
+        time.sleep(2)
         current_devices = set(glob.glob(joystick_path))
 
         added = current_devices - known_devices

@@ -2,7 +2,7 @@
 Description=Handles steam big picture for Bluetooth/USB controllers
 
 [Service]
-ExecStart=__HOME__/scripts/steam_controller_handler.py
+ExecStart=__HOME__/scripts/auto_big_picture.py
 Restart=always
 RestartSec=10
 

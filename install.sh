@@ -105,16 +105,16 @@ mkdir -p "$HOME/.config/systemd/user"
 echo "Configuring and copying files..."
 sed -e "s/__CONTROLLER_MAC_ADDRESS__/$CONTROLLER_MAC/g" \
     -e "s/__LAUNCH_PREFERENCE__/$LAUNCH_PREFERENCE/g" \
-    steam_controller_handler.py.template > "$HOME/scripts/steam_controller_handler.py"
+    auto_big_picture.py.template > "$HOME/scripts/auto_big_picture.py"
 
-sed "s|__HOME__|$HOME|g" steam-controller-handler.service.template > "$HOME/.config/systemd/user/steam-controller-handler.service"
-chmod +x "$HOME/scripts/steam_controller_handler.py"
+sed "s|__HOME__|$HOME|g" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
+chmod +x "$HOME/scripts/auto_big_picture.py"
 
 echo "Reloading systemd and starting the service..."
 systemctl --user daemon-reload
-systemctl --user enable --now steam-controller-handler.service
+systemctl --user enable --now auto-big-picture.service
 
-systemctl --user status steam-controller-handler.service
+systemctl --user status auto-big-picture.service
 echo ""
 echo "Setup complete!"
 echo "The service running. Connect your controller and enjoy."
