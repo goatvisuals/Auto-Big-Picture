@@ -14,19 +14,12 @@ LAUNCH_IF_CLOSED = __LAUNCH_PREFERENCE__
 # Core
 
 def handle_connect():
-    bp_check = "xwininfo -root -tree | grep -q 'Steam Big Picture Mode'"
-    is_bp_running = (subprocess.run(bp_check, shell=True).returncode == 0)
-    
-    if is_bp_running:
-        return
-    
     steam_is_running = (subprocess.run("pgrep -x steam > /dev/null", shell=True).returncode == 0)
 
-    if LAUNCH_IF_CLOSED:
+    if LAUNCH_IF_CLOSED and not steam_is_running:
         os.system("steam -bigpicture &")
-    else:
-        if steam_is_running:
-            os.system("steam steam://open/bigpicture &")
+    elif steam_is_running:
+        os.system("steam steam://open/bigpicture &")
 
 def handle_disconnect():
     steam_is_running = (subprocess.run("pgrep -x steam > /dev/null", shell=True).returncode == 0)
