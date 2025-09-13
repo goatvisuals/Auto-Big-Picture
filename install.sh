@@ -14,7 +14,7 @@ select_controller() {
 
     echo "Select your controller from the list:"
     select device_info in "${devices_array[@]}" "Enter_Manually"; do
-        if [[ "$REPLY" == "Enter_Manually" ]]; then
+        if [[ "$device_info" == "Enter_Manually" ]]; then
             read -p "Enter your controller's MAC Address: " CONTROLLER_MAC
             break
         elif [ -n "$device_info" ]; then
@@ -33,6 +33,34 @@ echo "Choose your installation type:"
 select installation_type in "Bluetooth_and_USB" "USB_Only"; do
     case $installation_type in
         "Bluetooth_and_USB")
+            echo "Checking for bluetoothctl"
+            if command -v pacman &> /dev/null; then
+                PACKAGE="bluez-utils"
+                if ! pacman -Q "$PACKAGE" &> /dev/null; then
+                    echo "Installing '$PACKAGE'..."
+                    sudo pacman -S --noconfirm "$PACKAGE"
+                else
+                    echo "'$PACKAGE' is already installed."
+                fi
+            elif command -v apt &> /dev/null; then
+                PACKAGE="bluez"
+                if ! dpkg -s "$PACKAGE" &> /dev/null; then
+                    echo "Installing '$PACKAGE'..."
+                    sudo apt update && sudo apt install -y "$PACKAGE"
+                else
+                    echo "'$PACKAGE' is already installed."
+                fi
+            elif command -v dnf &> /dev/null; then
+                PACKAGE="bluez"
+                if ! dnf list installed "$PACKAGE" &> /dev/null; then
+                    echo "Installing '$PACKAGE'..."
+                    sudo dnf install -y "$PACKAGE"
+                else
+                    echo "'$PACKAGE' is already installed."
+                fi
+            else
+                echo "Warning: Could not detect package manager. Manually install bluetoothctl (part of BlueZ)."
+            fi
             select_controller
             if [ -z "$CONTROLLER_MAC" ]; then
                 echo "Error: MAC Address selection failed. Aborting."
@@ -77,35 +105,6 @@ if [ -n "$custom_path" ]; then
 fi
 echo "Using config path: $CONFIG_DIR"
 
-echo "Checking for dependencies..."
-if command -v pacman &> /dev/null; then
-    PACKAGE="python-dbus"
-    if ! pacman -Q "$PACKAGE" &> /dev/null; then
-        echo "Installing '$PACKAGE'..."
-        sudo pacman -S --noconfirm "$PACKAGE"
-    else
-        echo "'$PACKAGE' is already installed."
-    fi
-elif command -v apt &> /dev/null; then
-    PACKAGE="python3-dbus"
-    if ! dpkg -s "$PACKAGE" &> /dev/null; then
-        echo "Installing '$PACKAGE'..."
-        sudo apt update && sudo apt install -y "$PACKAGE"
-    else
-        echo "'$PACKAGE' is already installed."
-    fi
-elif command -v dnf &> /dev/null; then
-    PACKAGE="python3-dbus"
-    if ! dnf list installed "$PACKAGE" &> /dev/null; then
-        echo "Installing '$PACKAGE'..."
-        sudo dnf install -y "$PACKAGE"
-    else
-        echo "'$PACKAGE' is already installed."
-    fi
-else
-    echo "Warning: Could not detect package manager. Make sure 'dbus-python' is installed."
-fi
-
 echo "Creating directories..."
 mkdir -p "$CONFIG_DIR"
 mkdir -p "$HOME/.config/systemd/user"
@@ -113,11 +112,11 @@ mkdir -p "$HOME/.config/systemd/user"
 echo "Configuring and copying files..."
 sed -e "s/__CONTROLLER_MAC_ADDRESS__/$CONTROLLER_MAC/g" \
     -e "s/__LAUNCH_PREFERENCE__/$LAUNCH_PREFERENCE/g" \
-    auto_big_picture.py.template > "$CONFIG_DIR/auto_big_picture.py"
+    auto-big-picture.py.template > "$CONFIG_DIR/auto-big-picture.py"
 
-SCRIPT_PATH="$CONFIG_DIR/auto_big_picture.py"
+SCRIPT_PATH="$CONFIG_DIR/auto-big-picture.py"
 sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
-chmod +x "$CONFIG_DIR/auto_big_picture.py"
+chmod +x "$CONFIG_DIR/auto-big-picture.py"
 
 echo "Reloading systemd and starting the service..."
 systemctl --user daemon-reload
@@ -126,4 +125,4 @@ systemctl --user enable --now auto-big-picture.service
 systemctl --user status auto-big-picture.service
 echo ""
 echo "Setup complete!"
-echo "The service running. Connect your controller and enjoy."
+echo "The service is running. Connect your controller and enjoy."
