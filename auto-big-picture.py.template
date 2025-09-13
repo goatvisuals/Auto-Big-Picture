@@ -1,0 +1,75 @@
+#!/usr/bin/env python3
+import os
+import subprocess
+import time
+import glob
+
+CONTROLLER_MAC_ADDRESS = "__CONTROLLER_MAC_ADDRESS__"
+LAUNCH_IF_CLOSED = __LAUNCH_PREFERENCE__
+
+# Core
+
+def is_steam_running():
+    return subprocess.run(["pgrep", "-x", "steam"], capture_output=True).returncode == 0
+
+def is_game_running():
+    cmd = "pgrep -af 'steamapps/common' | grep -v 'd3ddriverquery64.exe'"
+    return subprocess.run(cmd, shell=True, capture_output=True).returncode == 0
+
+def handle_connect():
+    steam_running = is_steam_running()
+    if LAUNCH_IF_CLOSED or steam_running:
+        if steam_running:
+            subprocess.Popen(["steam", "steam://open/bigpicture"])
+        else:
+            subprocess.Popen(["steam", "-bigpicture"])
+
+def handle_disconnect():
+    if not is_steam_running():
+        return
+    if is_game_running():
+        return
+    subprocess.Popen(["steam", "steam://close/bigpicture"])
+
+# Monitoring
+
+def is_bt_connected(mac):
+    if not mac or mac == "DISABLED":
+        return False
+    cmd = f"bluetoothctl info {mac} | grep 'Connected: yes'"
+    return subprocess.run(cmd, shell=True, capture_output=True).returncode == 0
+
+# Main
+
+if __name__ == "__main__":
+    joystick_path = "/dev/input/by-id/*-event-joystick"
+    prev_joysticks = set(glob.glob(joystick_path))
+    prev_bt_connected = False
+
+    if CONTROLLER_MAC_ADDRESS and CONTROLLER_MAC_ADDRESS != "DISABLED":
+        prev_bt_connected = is_bt_connected(CONTROLLER_MAC_ADDRESS)
+
+    try:
+        while True:
+            curr_joysticks = set(glob.glob(joystick_path))
+            added = curr_joysticks - prev_joysticks
+            removed = prev_joysticks - curr_joysticks
+
+            if added:
+                handle_connect()
+            if removed:
+                handle_disconnect()
+
+            prev_joysticks = curr_joysticks
+
+            if CONTROLLER_MAC_ADDRESS and CONTROLLER_MAC_ADDRESS != "DISABLED":
+                curr_bt_connected = is_bt_connected(CONTROLLER_MAC_ADDRESS)
+                if curr_bt_connected and not prev_bt_connected:
+                    handle_connect()
+                if not curr_bt_connected and prev_bt_connected:
+                    handle_disconnect()
+                prev_bt_connected = curr_bt_connected
+
+            time.sleep(1)
+    except KeyboardInterrupt:
+        pass
