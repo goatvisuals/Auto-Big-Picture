@@ -1,9 +1,9 @@
 [Unit]
 Description=Handles steam big picture for Bluetooth/USB controllers
-After=graphical-session.target
+After=graphical-session.target bluetooth.service
 
 [Service]
-ExecStart=/bin/bash -c "sleep 10 && __SCRIPT_PATH__"
+ExecStart=__SCRIPT_PATH__
 Restart=always
 RestartSec=10
 
