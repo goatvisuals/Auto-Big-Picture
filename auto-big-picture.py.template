@@ -43,7 +43,10 @@ def is_bt_connected(mac):
 
 if __name__ == "__main__":
     joystick_path = "/dev/input/by-id/*-event-joystick"
-    prev_joysticks = set(glob.glob(joystick_path))
+    try:
+        prev_joysticks = set(glob.glob(joystick_path))
+    except OSError:
+        prev_joysticks = set()
     prev_bt_connected = False
 
     if CONTROLLER_MAC_ADDRESS and CONTROLLER_MAC_ADDRESS != "DISABLED":
@@ -51,7 +54,11 @@ if __name__ == "__main__":
 
     try:
         while True:
-            curr_joysticks = set(glob.glob(joystick_path))
+            try:
+                curr_joysticks = set(glob.glob(joystick_path))
+            except OSError:
+                curr_joysticks = set()
+
             added = curr_joysticks - prev_joysticks
             removed = prev_joysticks - curr_joysticks
 
