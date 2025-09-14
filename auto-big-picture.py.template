@@ -20,7 +20,8 @@ def handle_connect():
     steam_running = is_steam_running()
     if LAUNCH_IF_CLOSED or steam_running:
         env = os.environ.copy()
-        env['DISPLAY'] = ':0'
+        if 'WAYLAND_DISPLAY' not in env and 'DISPLAY' not in env:
+            env['DISPLAY'] = ':0'
         if steam_running:
             subprocess.Popen(["steam", "steam://open/bigpicture"], env=env)
         else:
