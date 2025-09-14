@@ -1,6 +1,6 @@
 [Unit]
 Description=Handles steam big picture for Bluetooth/USB controllers
-After=graphical-session.target bluetooth.service
+After=graphical-session.target
 
 [Service]
 ExecStart=__SCRIPT_PATH__
