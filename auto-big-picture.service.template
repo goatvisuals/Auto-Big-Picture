@@ -3,6 +3,7 @@ Description=Handles steam big picture for Bluetooth/USB controllers
 After=graphical-session.target
 
 [Service]
+Type=simple
 ExecStart=__SCRIPT_PATH__
 Restart=always
 RestartSec=10
