@@ -33,7 +33,7 @@ echo "Choose your installation type:"
 select installation_type in "Bluetooth_and_USB" "USB_Only"; do
     case $installation_type in
         "Bluetooth_and_USB")
-            echo "Checking for bluetoothctl"
+            echo "Checking for bluetoothctl (required for bluetooth mode)..."
             if command -v pacman &> /dev/null; then
                 PACKAGE="bluez-utils"
                 if ! pacman -Q "$PACKAGE" &> /dev/null; then
@@ -115,7 +115,13 @@ sed -e "s/__CONTROLLER_MAC_ADDRESS__/$CONTROLLER_MAC/g" \
     auto-big-picture.py.template > "$CONFIG_DIR/auto-big-picture.py"
 
 SCRIPT_PATH="$CONFIG_DIR/auto-big-picture.py"
-sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
+
+if [ "$CONTROLLER_MAC" != "DISABLED" ]; then
+    sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g; s|After=graphical-session.target|After=graphical-session.target bluetooth.service|" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
+else
+    sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
+fi
+
 chmod +x "$CONFIG_DIR/auto-big-picture.py"
 
 echo "Reloading systemd and starting the service..."
