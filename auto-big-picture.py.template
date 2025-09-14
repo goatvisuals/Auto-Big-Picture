@@ -20,11 +20,11 @@ def handle_connect():
     steam_running = is_steam_running()
     if LAUNCH_IF_CLOSED or steam_running:
         env = os.environ.copy()
-        if 'WAYLAND_DISPLAY' not in env and 'DISPLAY' not in env:
-            env['DISPLAY'] = ':0'
         if 'WAYLAND_DISPLAY' in env:
+            env['GBM_BACKEND'] = 'nvidia-drm'
             env['__GLX_VENDOR_LIBRARY_NAME'] = 'nvidia'
-        time.sleep(1)
+        else:
+            env['DISPLAY'] = ':0'
         cmd = ["steam", "steam://open/bigpicture"] if steam_running else ["steam", "-bigpicture"]
         subprocess.Popen(cmd, env=env)
 
