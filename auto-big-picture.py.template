@@ -22,10 +22,10 @@ def handle_connect():
         env = os.environ.copy()
         if 'WAYLAND_DISPLAY' not in env and 'DISPLAY' not in env:
             env['DISPLAY'] = ':0'
-        if steam_running:
-            subprocess.Popen(["steam", "steam://open/bigpicture"], env=env)
-        else:
-            subprocess.Popen(["steam", "-bigpicture"], env=env)
+        if 'WAYLAND_DISPLAY' in env:
+            env['__GLX_VENDOR_LIBRARY_NAME'] = 'nvidia'
+        cmd = ["steam", "steam://open/bigpicture"] if steam_running else ["steam", "-bigpicture"]
+        subprocess.Popen(cmd, env=env)
 
 def handle_disconnect():
     if not is_steam_running():
