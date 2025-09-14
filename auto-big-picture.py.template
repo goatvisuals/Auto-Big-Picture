@@ -24,6 +24,7 @@ def handle_connect():
             env['DISPLAY'] = ':0'
         if 'WAYLAND_DISPLAY' in env:
             env['__GLX_VENDOR_LIBRARY_NAME'] = 'nvidia'
+        time.sleep(1)
         cmd = ["steam", "steam://open/bigpicture"] if steam_running else ["steam", "-bigpicture"]
         subprocess.Popen(cmd, env=env)
 
