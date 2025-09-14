@@ -1,6 +1,6 @@
 [Unit]
 Description=Handles steam big picture for Bluetooth/USB controllers
-After=graphical-session.target
+After=network.target
 
 [Service]
 Type=simple
@@ -9,4 +9,4 @@ Restart=always
 RestartSec=10
 
 [Install]
-WantedBy=graphical-session.target
+WantedBy=default.target
