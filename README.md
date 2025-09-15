@@ -16,13 +16,15 @@ Automatically launch/close Steam big picture mode when a controller is connected
 
 ## Supported Distros
 
-This was built and tested on **Arch btw**, but the installer will work on most distros:
+The tool should work on most distros from the **Arch, Debian/Ubuntu, and Fedora families**. It should also play nice with derivatives like CachyOS, Mint, Nobara etc. If your distro works *(or doesn't)* let me know so I can look into it
 
-* **Arch**
-* **Debian / Ubuntu**
-* **Fedora**
 
-It should also work on any derivatives of these (like CachyOS, Mint, Nobara, etc.). If your distro isn't listed and it works *(or doesn't)*, feel free to open an issue
+**Setups I always test on:**
+
+* ✅ Arch + KDE Plasma (Wayland)
+* ✅ Mint + Cinnamon (X11)
+* ✅ CachyOS + Hyprland (Wayland)
+* ✅ Fedora + KDE Plasma (Wayland)
 
 <br>
 
@@ -37,8 +39,8 @@ Tested with **Xbox Wireless Controller** both via bluetooth and USB, but should 
 Just clone the repo and run the installer script. It will guide you through the rest.
 
 ```bash
-git clone https://github.com/goatvisuals/Auto-Big-Picture
-cd Auto-Big-Picture
+git clone https://github.com/goatvisuals/auto-big-picture.git
+cd auto-big-picture
 ./install.sh
 ```
 The script will handle dependencies if needed (bluez/bluez-utils for Bluetooth mode)
