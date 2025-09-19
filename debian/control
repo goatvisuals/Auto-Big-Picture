@@ -10,3 +10,4 @@ Architecture: all
 Depends: python3
 Description: Auto-launch Steam Big Picture on controller connect (Bluetooth/USB)
  Lightweight Python script for Linux. Runs as systemd service.
+Homepage: https://github.com/goatvisuals/Auto-Big-Picture
