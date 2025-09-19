@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+%:
+ dh $@
+
+override_dh_auto_install:
+ install -d $(DESTDIR)/usr/share/auto-big-picture
+ install -m 755 install.sh $(DESTDIR)/usr/bin/auto-big-picture-setup
+ install -m 755 uninstall.sh $(DESTDIR)/usr/bin/auto-big-picture-uninstall
+ install -m 644 auto-big-picture.py.template $(DESTDIR)/usr/share/auto-big-picture/
+ install -m 644 auto-big-picture.service.template $(DESTDIR)/usr/share/auto-big-picture/
