@@ -5,6 +5,7 @@ echo "Uninstalling Auto-Big-Picture"
 echo "Stopping and disabling systemd service..."
 systemctl --user stop auto-big-picture.service
 systemctl --user disable auto-big-picture.service
+systemctl --user unmask auto-big-picture.service
 
 echo "Removing files..."
 SERVICE_FILE="$HOME/.config/systemd/user/auto-big-picture.service"

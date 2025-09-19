@@ -33,7 +33,7 @@ echo "Choose your installation type:"
 select installation_type in "Bluetooth_and_USB" "USB_Only"; do
     case $installation_type in
         "Bluetooth_and_USB")
-            echo "Checking for bluetoothctl (required for bluetooth mode)..."
+            echo "Checking for bluetoothctl (required for Bluetooth mode)..."
             if command -v pacman &> /dev/null; then
                 PACKAGE="bluez-utils"
                 if ! pacman -Q "$PACKAGE" &> /dev/null; then
@@ -105,6 +105,11 @@ if [ -n "$custom_path" ]; then
 fi
 echo "Using config path: $CONFIG_DIR"
 
+TEMPLATE_DIR="."
+if [ -d "/usr/share/auto-big-picture" ]; then
+    TEMPLATE_DIR="/usr/share/auto-big-picture"
+fi
+
 echo "Creating directories..."
 mkdir -p "$CONFIG_DIR"
 mkdir -p "$HOME/.config/systemd/user"
@@ -112,14 +117,14 @@ mkdir -p "$HOME/.config/systemd/user"
 echo "Configuring and copying files..."
 sed -e "s/__CONTROLLER_MAC_ADDRESS__/$CONTROLLER_MAC/g" \
     -e "s/__LAUNCH_PREFERENCE__/$LAUNCH_PREFERENCE/g" \
-    auto-big-picture.py.template > "$CONFIG_DIR/auto-big-picture.py"
+    "$TEMPLATE_DIR/auto-big-picture.py.template" > "$CONFIG_DIR/auto-big-picture.py"
 
 SCRIPT_PATH="$CONFIG_DIR/auto-big-picture.py"
 
 if [ "$CONTROLLER_MAC" != "DISABLED" ]; then
-    sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g; s|After=graphical-session.target|After=graphical-session.target bluetooth.service|" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
+    sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g; s|After=graphical-session.target|After=graphical-session.target bluetooth.service|" "$TEMPLATE_DIR/auto-big-picture.service.template" > "$HOME/.config/systemd/user/auto-big-picture.service"
 else
-    sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g" auto-big-picture.service.template > "$HOME/.config/systemd/user/auto-big-picture.service"
+    sed "s|__SCRIPT_PATH__|$SCRIPT_PATH|g" "$TEMPLATE_DIR/auto-big-picture.service.template" > "$HOME/.config/systemd/user/auto-big-picture.service"
 fi
 
 chmod +x "$CONFIG_DIR/auto-big-picture.py"
