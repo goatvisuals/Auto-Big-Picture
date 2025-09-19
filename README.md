@@ -36,6 +36,24 @@ Tested with **Xbox Wireless Controller** both via bluetooth and USB, but should 
 
 ## Installation
 
+### AUR
+
+You can easily install with your fav AUR helper
+
+```bash
+yay -S auto-big-picture
+```
+
+and run ``auto-big-picture-setup`` to go through setup
+
+<br>
+
+> **Note:** After updates you will need to run ``auto-big-picture-setup`` again to apply the update.
+
+<br>
+
+### Everyone else
+
 Just clone the repo and run the installer script. It will guide you through the rest.
 
 ```bash
@@ -89,6 +107,24 @@ Input custom path or leave blank to keep the default
 <br>
 
 ## Uninstall
+
+### AUR
+
+Run the uninstaller
+
+```bash
+auto-big-picture-uninstall
+```
+
+and remove with AUR helper
+
+```bash
+yay -Rns auto-big-picture
+```
+
+<br>
+
+### Everyone else
 
 Just run the uninstaller and that's it.
 
