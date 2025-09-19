@@ -48,7 +48,10 @@ The script will handle dependencies if needed (bluez/bluez-utils for Bluetooth m
 
 <br>
 
-> **Options during install:**
+<details>
+  <summary>Options during install</summary>
+
+<br>
 
 **Step 1: Installation type**
 
@@ -81,6 +84,7 @@ Input custom path or leave blank to keep the default
 
 ``~/.config/auto-big-picture``
 
+</details>
 
 <br>
 
@@ -95,8 +99,12 @@ Just run the uninstaller and that's it.
 
 <br>
 
+<details>
+  <summary>Manual uninstall</summary>
 
-> **Note**: If you prefer to manually uninstall, you can do it by stopping and disabling the service and then removing the files. The service file is always located at `~/.config/systemd/user/auto-big-picture.service`, and the config/script is by default stored in `~/.config/auto-big-picture/auto-big-picture.py` (or a different location you chose during installation).
+<br>
+
+If you prefer to manually uninstall, you can do it by stopping and disabling the service and then removing the files. The service file is always located at `~/.config/systemd/user/auto-big-picture.service`, and the config/script is by default stored in `~/.config/auto-big-picture/auto-big-picture.py` (or a different location you chose during installation).
 
 
 **1 Stop and disable the service:**
@@ -116,6 +124,8 @@ rm -f ~/.config/systemd/user/auto-big-picture.service
 rm -f ~/.config/auto-big-picture/auto-big-picture.py
 rmdir ~/.config/auto-big-picture
 ```
+
+</details>
 
 <br>
 
