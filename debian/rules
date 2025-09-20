@@ -2,9 +2,3 @@
 
 %:
 	dh $@
-
-override_dh_auto_install:
-	dh_auto_install
-	dh_install
-	chmod 755 debian/auto-big-picture/usr/bin/auto-big-picture-setup
-	chmod 755 debian/auto-big-picture/usr/bin/auto-big-picture-uninstall

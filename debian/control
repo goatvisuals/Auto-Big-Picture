@@ -1,5 +1,5 @@
 Source: auto-big-picture
-Section: games
+Section: utils
 Priority: optional
 Maintainer: goatvisuals <goat@iusevimbtw.com>
 Build-Depends: debhelper-compat (=13)
@@ -8,6 +8,7 @@ Standards-Version: 4.6.2
 Package: auto-big-picture
 Architecture: all
 Depends: python3
-Description: Auto-launch Steam Big Picture on controller connect (Bluetooth/USB)
+Recommends: bluez
+Description: Auto launch Steam Big Picture on controller connect (Bluetooth/USB)
  Lightweight Python script for Linux. Runs as systemd service.
 Homepage: https://github.com/goatvisuals/Auto-Big-Picture
