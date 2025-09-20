@@ -2,3 +2,8 @@
 
 %:
 	dh $@
+
+override_dh_install:
+	dh_install
+	mv debian/auto-big-picture/usr/bin/install.sh debian/auto-big-picture/usr/bin/auto-big-picture-setup
+	mv debian/auto-big-picture/usr/bin/uninstall.sh debian/auto-big-picture/usr/bin/auto-big-picture-uninstall

@@ -1,4 +1,4 @@
-install.sh usr/bin/auto-big-picture-setup
-uninstall.sh usr/bin/auto-big-picture-uninstall
-auto-big-picture.py.template usr/share/auto-big-picture
-auto-big-picture.service.template usr/share/auto-big-picture
+install.sh usr/bin/
+uninstall.sh usr/bin/
+auto-big-picture.py.template usr/share/auto-big-picture/
+auto-big-picture.service.template usr/share/auto-big-picture/
