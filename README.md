@@ -36,9 +36,13 @@ Tested with **Xbox Wireless Controller** both via bluetooth and USB, but should 
 
 ## Installation
 
-### AUR
+<details>
 
-You can easily install with your fav AUR helper
+<summary>Arch based</summary>
+
+<br>
+
+Use your fav AUR helper
 
 ```bash
 yay -S auto-big-picture
@@ -52,7 +56,37 @@ and run ``auto-big-picture-setup`` to go through setup
 
 <br>
 
-### Everyone else
+</details>
+
+<details>
+
+<summary>Debian based</summary>
+
+<br>
+
+Download the latest .deb from the [releases page](https://github.com/goatvisuals/Auto-Big-Picture/releases)
+
+Install with:
+
+```bash
+sudo dpkg -i auto-big-picture_X.X-X_all.deb # Replace X's to match most up to date version
+```
+
+Run the setup:
+
+```bash
+auto-big-picture-setup
+```
+
+<br>
+
+</details>
+
+<details>
+
+<summary>Everyone else</summary>
+
+<br>
 
 Just clone the repo and run the installer script. It will guide you through the rest.
 
@@ -63,44 +97,7 @@ cd auto-big-picture
 ```
 The script will handle dependencies if needed (bluez/bluez-utils for Bluetooth mode)
 
-
 <br>
-
-<details>
-  <summary>Options during install</summary>
-
-<br>
-
-**Step 1: Installation type**
-
-1: Install for Bluetooth and USB connections
-
-2: Install for USB connections only
-
-
-<br>
-
-**Step 1.5: *Only for bluetooth installation type***
-
-Choose controller from list of paired devices
-
-
-<br>
-
-**Step 2: Should steam launch when a controller gets connected even if it isn't already running?**
-
-1: Yes - launches even if steam wasn't running
-
-2: No - only start big picture when the steam process is already running
-
-
-<br>
-
-**Step 3: Change config path**
-
-Input custom path or leave blank to keep the default
-
-``~/.config/auto-big-picture``
 
 </details>
 
@@ -108,23 +105,51 @@ Input custom path or leave blank to keep the default
 
 ## Uninstall
 
-### AUR
+<details>
 
-Run the uninstaller
+<summary>Arch based</summary>
+
+<br>
+
+First run the uninstaller
 
 ```bash
 auto-big-picture-uninstall
 ```
 
-and remove with AUR helper
+and remove with your AUR helper ``yay -Rns auto-big-picture``
+
+<br>
+
+</details>
+
+<details>
+
+<summary>Debian based</summary>
+
+<br>
+
+Run the uninstaller:
 
 ```bash
-yay -Rns auto-big-picture
+auto-big-picture-uninstall
+```
+
+Remove the package:
+
+```bash
+sudo dpkg -r auto-big-picture
 ```
 
 <br>
 
-### Everyone else
+</details>
+
+<details>
+
+<summary>Everyone else</summary>
+
+<br>
 
 Just run the uninstaller and that's it.
 
@@ -132,11 +157,12 @@ Just run the uninstaller and that's it.
 ./uninstall.sh
 ```
 
-
 <br>
 
+</details>
+
 <details>
-  <summary>Manual uninstall</summary>
+<summary>Manual uninstall</summary>
 
 <br>
 
@@ -160,6 +186,8 @@ rm -f ~/.config/systemd/user/auto-big-picture.service
 rm -f ~/.config/auto-big-picture/auto-big-picture.py
 rmdir ~/.config/auto-big-picture
 ```
+
+<br>
 
 </details>
 
