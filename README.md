@@ -1,6 +1,6 @@
 # Auto-Big-Picture 🎮
 
-Automatically launch/close Steam big picture mode when a controller is connected or disconnected on linux.
+Automatically launch/close Steam Big Picture mode when a controller is connected or disconnected on linux.
 
 <br>
 
@@ -14,7 +14,9 @@ Automatically launch/close Steam big picture mode when a controller is connected
 
 <br>
 
-## Supported Distros
+## Supported Distros 
+
+[![Arch](https://img.shields.io/badge/Arch_Linux-Verified-%231793D1?logo=arch-linux&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![CachyOS](https://img.shields.io/badge/CachyOS-Verified-%2334C4B5?logo=linux&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Ubuntu](https://img.shields.io/badge/Ubuntu-Verified-%23E95420?logo=ubuntu&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Linux Mint](https://img.shields.io/badge/Linux_Mint-Verified-%2387CF3E?logo=linux-mint&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Fedora](https://img.shields.io/badge/Fedora-Verified-%23294383?logo=fedora&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Bazzite](https://img.shields.io/badge/Bazzite-Compatible-%23F4A261?logo=linux&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Nobara](https://img.shields.io/badge/Nobara-Compatible-%23F41F35?logo=linux&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Pop!_OS](https://img.shields.io/badge/Pop!_OS-Compatible-%2348B9C7?logo=pop-os&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Manjaro](https://img.shields.io/badge/Manjaro-Compatible-%2334BE8C?logo=manjaro&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues) [![Garuda](https://img.shields.io/badge/Garuda-Compatible-%23F02D64?logo=linux&logoColor=fff&style=for-the-badge)](https://github.com/goatvisuals/Auto-Big-Picture/issues)
 
 The tool should work on most distros from the **Arch, Debian/Ubuntu, and Fedora families**. It should also play nice with derivatives like CachyOS, Mint, Nobara etc. If your distro works *(or doesn't)* let me know so I can look into it
 
@@ -22,8 +24,9 @@ The tool should work on most distros from the **Arch, Debian/Ubuntu, and Fedora 
 **Setups I always test on:**
 
 * ✅ Arch + KDE Plasma (Wayland)
-* ✅ Mint + Cinnamon (X11)
 * ✅ CachyOS + Hyprland (Wayland)
+* ✅ Ubuntu + Gnome (Wayland)
+* ✅ Mint + Cinnamon (X11)
 * ✅ Fedora + KDE Plasma (Wayland)
 
 <br>
@@ -64,9 +67,9 @@ and run ``auto-big-picture-setup`` to go through setup
 
 <br>
 
-Download the latest .deb from the [releases page](https://github.com/goatvisuals/Auto-Big-Picture/releases)
+Download the latest .deb file from the [releases page](https://github.com/goatvisuals/Auto-Big-Picture/releases)
 
-Install with:
+Double click the file or install with:
 
 ```bash
 sudo dpkg -i auto-big-picture_X.X-X_all.deb # Replace X's to match most up to date version
