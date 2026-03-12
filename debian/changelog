@@ -1,5 +1,5 @@
-auto-big-picture (1.0-1) unstable; urgency=medium
+auto-big-picture (1.1-1) unstable; urgency=medium
 
-  * Initial release. Auto-launch Steam BP on controller connect.
+  * Hardening and security updates to the setup (install.sh) and auto-big-picture.py.template
 
- -- goatvisuals <goat@iusevimbtw.com>  Sat, 20 Sep 2025 12:00:00 +0000
+ -- goatvisuals <goat@iusevimbtw.com>  Thu, 12 Mar 2026 15:30:00 +0000
