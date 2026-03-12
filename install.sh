@@ -9,7 +9,7 @@ validate_mac() {
 select_controller() {
     echo "Scanning for bluetooth devices..."
     mapfile -t devices_array < <(bluetoothctl devices Paired 2>/dev/null | awk '{print $2, substr($0, index($0,$3))}')
-    
+
     if [ ${#devices_array[@]} -eq 0 ]; then
         echo "No paired bluetooth devices found."
         echo "Pair your controller first or choose the USB-only option."
@@ -111,8 +111,8 @@ CONFIG_DIR="$HOME/.config/auto-big-picture"
 read -rp "Default config path: $CONFIG_DIR. Change? Input path or leave blank to keep default: " custom_path
 
 if [ -n "$custom_path" ]; then
-    if echo "$custom_path" | grep -qE '[;$(`{}*?<>]|^/|\s' || [[ -L "$custom_path" ]]; then
-        echo "Error: Unsafe config path. Only absolute paths without special chars allowed."
+    if echo "$custom_path" | grep -qE '[;$(`{}*?<>|&[:space:]]' || [[ -L "$custom_path" ]]; then
+        echo "Error: Unsafe config path. Contains forbidden chars or is a symlink."
         exit 1
     fi
     CONFIG_DIR="$custom_path"
@@ -182,13 +182,10 @@ with open(os.path.expanduser('~/.config/systemd/user/auto-big-picture.service'),
 "
 
 chmod +x "$SCRIPT_PATH"
-
 echo "Reloading systemd and starting the service..."
 systemctl --user daemon-reload
 systemctl --user enable --now auto-big-picture.service
-
 echo ""
 systemctl --user status auto-big-picture.service --no-pager -l || true
 echo ""
 echo "Setup complete!"
-
