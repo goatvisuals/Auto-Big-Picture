@@ -21,7 +21,7 @@ def get_steam_cmd():
 
 
 def is_steam_running():
-    return subprocess.run(["pgrep", "-x", "steam"], capture_output=True).returncode == 0:
+    return subprocess.run(["pgrep", "-x", "steam"], capture_output=True).returncode == 0
 
 def is_game_running():
     cmd = ["sh", "-c", "pgrep -af 'steamapps/common' | grep -v 'd3ddriverquery64.exe'"]
