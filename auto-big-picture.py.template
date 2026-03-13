@@ -39,7 +39,7 @@ def handle_connect():
             env['__GLX_VENDOR_LIBRARY_NAME'] = 'nvidia'
         else:
             env['DISPLAY'] = ':0'
-        cmd = steam_cmd + ["steam://open/bigpicture"] if steam_running else steam_cmd + ["-bigpicture"]
+        cmd = steam_cmd + ["steam://open/bigpicture"]
         subprocess.Popen(cmd, env=env)
 
 def handle_disconnect():
