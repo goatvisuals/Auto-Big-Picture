@@ -1,5 +1,5 @@
-auto-big-picture (1.1-1) unstable; urgency=medium
+auto-big-picture (1.2-1) unstable; urgency=medium
 
-  * Hardening and security updates to the setup (install.sh) and auto-big-picture.py.template
+  * Added flatpak compatibility
 
- -- goatvisuals <goat@iusevimbtw.com>  Thu, 12 Mar 2026 15:30:00 +0000
+ -- goatvisuals <goat@iusevimbtw.com>  Fri, 13 Mar 2026 14:30:00 +0000
